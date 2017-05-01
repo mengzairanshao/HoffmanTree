@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#define N 4
+#define N 6
 enum MyEnum
 {
 	left=1,
@@ -22,30 +22,17 @@ typedef struct HoffmanTreeNode
 void sort(HoffmanTree* T, int length)
 {
 	HoffmanTree tempT = NULL;
-	HoffmanTree finalT = NULL;
-	finalT = T[length - 1];
-	int k = 0;
-	for (int i = 0; i < length; i++)
+	for (int i = length; i < N; i++)
 	{
-		for (int j = i + 1; j < length; j++)
+		for (int j = i + 1; j < N; j++)
 		{
-			if (T[j]->conut > T[i]->conut)
+			if (T[j]->conut < T[i]->conut)
 			{
 				tempT = T[j];
 				T[j] = T[i];
 				T[i] = tempT;
 			}
 		}
-		if (finalT == T[i])
-			k = i;
-	}
-	if (k < (length - 1) && finalT->conut == T[k + 1]->conut)
-	{
-		while (k < (length - 1) && finalT->conut == T[k + 1]->conut)
-			k++;
-		tempT = T[k];
-		T[k] = finalT;
-		finalT = tempT;
 	}
 }
 
@@ -71,22 +58,22 @@ void Encoding(HoffmanTree* T,int dir)
 
 HoffmanTree createHoffmanTree(HoffmanTree* T, int length)
 {
-	for (; length != 1; length--)
+	for (; length <=N-2; length++)
 	{
 		HoffmanTree tempT = NULL;
 		tempT = malloc(sizeof(HoffmanTreeNode));
 		sort(T, length);
-		Encoding(&T[length - 1], left);
-		Encoding(&T[length - 2], right);
-		tempT->conut = T[length - 1]->conut + T[length - 2]->conut;
+		Encoding(&T[length], left);
+		Encoding(&T[length+1], right);
+		tempT->conut = T[length]->conut + T[length +1]->conut;
 		strcpy_s(tempT->code, 256, "");
 		tempT->ele = -1;
-		tempT->lchild = T[length - 1];
-		tempT->rchild = T[length - 2];
-		T[length - 1] = NULL;
-		T[length - 2] = tempT;
+		tempT->lchild = T[length];
+		tempT->rchild = T[length+1];
+		T[length ] = NULL;
+		T[length +1] = tempT;
 	}
-	return T[0];
+	return T[N-1];
 }
 
 void TraversalPrintLeaf(HoffmanTree *T)
@@ -107,7 +94,7 @@ int main()
 	char code[256] = "";
 	HoffmanTree T[N];
 	HoffmanTree hoffmanTree = NULL;
-	int count[] = {13,7,2,5};
+	int count[] = {40,30,10,10,6,4 };
 	for (int i = 0; i < N; i++)
 	{
 		T[i] = malloc(sizeof(HoffmanTreeNode));
@@ -117,7 +104,7 @@ int main()
 		T[i]->lchild = NULL;
 		T[i]->rchild = NULL;
 	}
-	hoffmanTree = createHoffmanTree(T, N);
+	hoffmanTree = createHoffmanTree(T, 0);
 	TraversalPrintLeaf(&hoffmanTree);
 	return 0;
 }
