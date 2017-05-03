@@ -4,7 +4,7 @@
 
 #define N sizeof(count)/sizeof(int)
 
-int count[] = { 40,30,10,10,6,4 };
+int count[] = { 40,30,10,10,6,4,5,6,7,8};
 enum MyEnum
 {
 	left=1,
@@ -56,11 +56,11 @@ void Encoding(HoffmanTree* T,int dir)
 	{
 		if (dir == left)
 		{
-			strcat_s((*T)->code, 256,"1");
+			strcat_s((*T)->code, 256,"0");
 		}
 		else
 		{
-			strcat_s((*T)->code, 256, "0");
+			strcat_s((*T)->code, 256, "1");
 		}
 	}
 	else
@@ -106,7 +106,10 @@ int TraversalPrintLeaf(HoffmanTree *T)
 	static int length = 0;
 	if((*T)&&(*T)->lchild==NULL&&(*T)->rchild==NULL)
 	{
-		printf("%d对应的编码为:%s\n", (*T)->ele,(*T)->code);
+		printf("%d对应的编码为:", (*T)->ele);
+		for(int i = strlen((*T)->code)-1;i>=0;i--)
+			printf("%c", ((*T)->code)[i]);
+		printf("\n");
 		length += (*T)->conut * strlen((*T)->code);
 	}
 	else
